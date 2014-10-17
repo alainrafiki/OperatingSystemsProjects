@@ -1,0 +1,68 @@
+/* 
+ Alain-Daniel Wa-Baguma
+ Operating Systems - Fall 2014
+ Project 1 
+*/
+
+#include <sys/types.h>
+#include <stdio.h>
+#include <unistd.h>
+
+int main(int argc, const char* argv[])
+{
+int n;
+pid_t pid;
+
+if (argc == 2){
+    n = atoi( argv[1] );
+    //printf("\n Correct number of arguments \n"); // for debug purpose
+}
+
+if (n < 1){
+    fprintf(stderr, "\n Wrong argument argv[1], dude! \n");
+    return 1;
+}
+pid = fork();
+
+if (pid < 0){ /* error occured */
+    fprintf(stderr, "\n Fork failed \n ");
+    return 1;
+}
+
+if (pid ==  0){ /* child process  */
+
+    //printf("\n We have entered the child process \n"); // for debug purpose
+
+    if (n % 2 == 0){
+        while (n > 1){
+            printf("%d, ", n);
+            n = n / 2;
+        }
+        printf("%d \n", n);
+    }
+    else if ( n == 1){
+        printf("%d \n", n);
+    }
+    else {
+        while (n > 1){
+            if(n % 2 != 0){
+                printf("%d, ", n);
+                n = ((3*n) + 1);
+            }
+            else{
+                printf("%d, ", n);
+                n = n / 2;
+            }
+        }
+        printf("%d \n", n);
+    }
+}
+
+else if (pid > 0) { /* parent process */
+    wait(NULL);
+    //printf("\n We are leaving parent process \n"); // for debug purpose
+    
+    return 0;
+}
+
+}
